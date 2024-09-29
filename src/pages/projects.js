@@ -31,7 +31,7 @@ const Projects = () => {
     <Container fluid>
       <h1 className="text-center my-3">Projects</h1>
       <Row xs={1} sm={2} lg={3} className="d-flex flex-wrap">
-        {projects.map(project => <PCard key={project.id} project={project} /> )}
+        {projects.filter(project => project.active).map(project => <PCard key={project.id} project={project} /> )}
       </Row>
     </Container>
   );

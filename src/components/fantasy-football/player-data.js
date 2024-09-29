@@ -31,7 +31,7 @@ const teamImgUrl = "https://a.espncdn.com/i/teamlogos/nfl/500/";
 // Get the NFL Games for the week
 const getNFLGamesForWeek = async (state, scoringPeriodId) => {
   const nflGames = await espn.getNFLGamesForWeek(state.seasonId, scoringPeriodId);
-  return nflGames.result.data;
+  return nflGames.result;
 }
 
 // Get the top scorers for each position

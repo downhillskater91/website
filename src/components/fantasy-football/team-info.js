@@ -137,8 +137,8 @@ const ScoringPeriodDropdown = ({ state, state: {currentScoringPeriod, currentTea
       }
 
       dispatch([
-        { field: 'currentTeam', value: response.result.data.team },
-        { field: 'currentMember', value: response.result.data.member },
+        { field: 'currentTeam', value: response.result.team },
+        { field: 'currentMember', value: response.result.member },
         { field: 'currentScoringPeriod', value: Number(id) },
         { field: 'currentMpId', value: mpId },
       ]);
@@ -169,8 +169,8 @@ const TeamsDropdown = ({ state: { teamInfo, leagueInfo, currentScoringPeriod, cu
       setIsLoading(true);
       const response = await espn.getTeam(leagueInfo.id, leagueInfo.seasonId, currentScoringPeriod, id);
       dispatch([
-        { field: 'currentTeam', value: response.result.data.team },
-        { field: 'currentMember', value: response.result.data.member }
+        { field: 'currentTeam', value: response.result.team },
+        { field: 'currentMember', value: response.result.member }
       ]);
       setIsLoading(false);
     }
@@ -287,9 +287,10 @@ const TeamHeader = ({ state, state: { currentTeam }, dispatch, setIsLoading }) =
 // top 3 player carousel
 const PlayersCarousel = ({state, state: { currentTeam, constants } }) => {
   // From the rostered players, grab the top 3 performers for the week (who were set in lineup)
-  
   // First identify the week's set lineup
   const starters = currentTeam.roster.entries.filter(p => {
+    console.log(p);
+    console.log(constants);
     return constants.lineupSlotsMap[p.lineupSlotId].starter;
   });
   

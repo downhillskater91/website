@@ -42,10 +42,13 @@ const LeagueSearchCard = ({ state, dispatch }) => {
     // make the API calls
     try {
       const leagueInfo = await espn.getLeagueSettings(details.leagueId, details.seasonId);
-      const currentMpId = leagueInfo.result.data.status.currentMatchupPeriod;
-      const currentScoringPeriod = leagueInfo.result.data.status.latestScoringPeriod > leagueInfo.result.data.status.finalScoringPeriod
-                                   ? leagueInfo.result.data.status.finalScoringPeriod
-                                   : leagueInfo.result.data.status.latestScoringPeriod;
+
+      console.log(leagueInfo);
+
+      const currentMpId = leagueInfo.result.status.currentMatchupPeriod;
+      const currentScoringPeriod = leagueInfo.result.status.latestScoringPeriod > leagueInfo.result.status.finalScoringPeriod
+                                   ? leagueInfo.result.status.finalScoringPeriod
+                                   : leagueInfo.result.status.latestScoringPeriod;
       const teamInfo = await espn.getTeams(details.leagueId, details.seasonId);
       const currentTeam = await espn.getTeam(details.leagueId, details.seasonId, currentScoringPeriod, 1);
       const allScores = await espn.getAllScores(details.leagueId, details.seasonId);
@@ -59,20 +62,21 @@ const LeagueSearchCard = ({ state, dispatch }) => {
       dispatch([
         { field: 'leagueId', value: details.leagueId },
         { field: 'seasonId', value: details.seasonId },
-        { field: 'leagueInfo', value: leagueInfo.result.data },
-        { field: 'teamInfo', value: teamInfo.result.data },
-        { field: 'constants', value: constants.result.data },
-        { field: 'currentTeam', value: currentTeam.result.data.team },
-        { field: 'currentMember', value: currentTeam.result.data.member },
+        { field: 'leagueInfo', value: leagueInfo.result },
+        { field: 'teamInfo', value: teamInfo.result },
+        { field: 'constants', value: constants.result },
+        { field: 'currentTeam', value: currentTeam.result.team },
+        { field: 'currentMember', value: currentTeam.result.member },
         { field: 'currentMpId', value: currentMpId },
         { field: 'currentScoringPeriod', value: currentScoringPeriod },
         { field: 'currentNFLWeek', value: currentScoringPeriod },
-        { field: 'allScores', value: allScores.result.data },
+        { field: 'allScores', value: allScores.result },
         { field: 'page', value: 'leagueOverview' },
-        { field: 'proTeamSchedules', value: proTeamSchedules.result.data }
+        { field: 'proTeamSchedules', value: proTeamSchedules.result }
       ]);
       return;
     } catch (err) {
+      console.log(err);
       setValidated(true);
       setError(true);
       setIsLoading(false);

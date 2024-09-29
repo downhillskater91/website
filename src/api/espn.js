@@ -1,7 +1,7 @@
 import * as helper from './espn-ffl-helper';
 
-const baseURL = 'https://vsnandy.herokuapp.com/api/v1/espn/ffl';
-//const baseURL = 'http://localhost:3000/api/v1/espn/ffl';
+//const baseURL = 'https://vsnandy.herokuapp.com/api/v1/espn/ffl';
+const baseURL = 'http://localhost:3000/espn/ffl';
 
 // Gets the basic league info
 export const getBasicLeagueInfo = async (leagueId, seasonId) => {
@@ -23,6 +23,7 @@ export const getLeagueSettings = async (leagueId, seasonId) => {
   const response = await fetch(`${baseURL}/league/${leagueId}/season/${seasonId}/settings`);
   if(response.status === 200) {
     const result = await response.json();
+    console.log(result);
     return {
       status: response.status,
       result
@@ -132,11 +133,14 @@ export const getPlayerInfoByName = async (seasonId, playerName) => {
 
 // Get the top scorers advanced stats for week for a position
 export const getTopScorersForWeek = async (leagueId, seasonId, scoringPeriodId, position) => {
+  console.log("Position:", position);
   const response = await fetch(`${baseURL}/league/${leagueId}/season/${seasonId}/scoringPeriod/${scoringPeriodId}/position/${encodeURIComponent(position)}/topScorers`);
 
   if(response.status === 200) {
     const result = await response.json();
-    const topScorers = result.data.players;
+    const topScorers = result.players;
+
+    console.log(topScorers);
 
     return {
       status: response.status,
@@ -149,11 +153,12 @@ export const getTopScorersForWeek = async (leagueId, seasonId, scoringPeriodId, 
 
 // Get the top positional scorers for a range of weeks
 export const getTopScorersForWeeks = async (leagueId, seasonId, startWeek, endWeek, position) => {
+  console.log("Position:", position);
   const response = await fetch(`${baseURL}/league/${leagueId}/season/${seasonId}/startWeek/${startWeek}/endWeek/${endWeek}/position/${encodeURIComponent(position)}/topScorers`);
 
   if(response.status === 200) {
     const result = await response.json();
-    const topScorers = result.data.players;
+    const topScorers = result.players;
 
     return {
       status: response.status,
@@ -221,7 +226,7 @@ export const getSports = async () => {
     // make the exports
     return {
       status: response.status,
-      result: result.data.kona['nav-data'].teams
+      result: result.kona['nav-data'].teams
     }
   }
 
@@ -236,7 +241,7 @@ export const getFflConstants = async() => {
 
     return {
       status: response.status,
-      result: { 'data': result.data["next_data"].props.pageProps.page.config.constants }
+      result: result["next_data"].props.pageProps.page.config.constants
     }
   }
 
@@ -253,7 +258,7 @@ export const botGetTopScorersForWeek = async (leagueId, seasonId, scoringPeriodI
 
   if(response.status === 200) {
     const result = await response.json();
-    const topScorers = result.data.players;
+    const topScorers = result.players;
     const topScorer = helper.getTopScorer(topScorers);
     
     return {
